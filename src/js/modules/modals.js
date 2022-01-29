@@ -27,8 +27,8 @@ const modals = () => {
 
     function deleteElementByClickPopup() {
       if (deleteElement) {
-        trigger[0].style.display = "none";
-        console.log(deleteElement);
+        fixedGift.classList.add("fixed-gift_hidden");
+        console.log(trigger[0]);
       }
     }
 

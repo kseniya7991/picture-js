@@ -114,6 +114,11 @@ h4 {
   right: 2rem;
   cursor: pointer;
 }
+
+.fixed-gift_hidden {
+  display: none;
+}
+
 .header .container {
   padding: 0;
 }
@@ -1113,6 +1118,7 @@ h4 {
 .popup-gift p {
   margin-top: 2rem;
 }
+
 .popup-close {
   position: absolute;
   top: -5rem;
