@@ -11,9 +11,26 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector),
       popup = document.querySelector(popupSelector),
       close = document.querySelectorAll(closeSelector),
-      windows = document.querySelectorAll("[data-]");
+      windows = document.querySelectorAll("[data-]"),
+      fixedGift = document.querySelector(".fixed-gift"),
+      scroll = calcScroll();
 
-    console.log(trigger);
+    console.log(fixedGift);
+
+    function handleGiftMargin(opened) {
+      if (opened) {
+        fixedGift.style.right = `calc(2rem + ${scroll}px)`;
+      } else {
+        fixedGift.style.right = `2rem`;
+      }
+    }
+
+    function deleteElementByClickPopup() {
+      if (deleteElement) {
+        trigger[0].style.display = "none";
+        console.log(deleteElement);
+      }
+    }
 
     if (trigger.length > 1) {
       trigger.forEach((item) => {
@@ -26,8 +43,11 @@ const modals = () => {
             el.classList.remove("popup_opened");
           });
 
+          deleteElementByClickPopup();
           popup.classList.add("popup_opened");
           document.body.classList.add("modal_open");
+          document.body.style.marginRight = `${scroll}px`;
+          handleGiftMargin(true);
         });
       });
     } else {
@@ -39,8 +59,11 @@ const modals = () => {
           el.classList.remove("popup_opened");
         });
 
+        deleteElementByClickPopup();
         popup.classList.add("popup_opened");
         document.body.classList.add("modal_open");
+        document.body.style.marginRight = `${scroll}px`;
+        handleGiftMargin(true);
       });
     }
 
@@ -51,21 +74,21 @@ const modals = () => {
         });
         popup.classList.remove("popup_opened");
         document.body.classList.remove("modal_open");
+        document.body.style.marginRight = `0px`;
+        handleGiftMargin(false);
       }
     });
 
     close.forEach((el) => {
       el.addEventListener("click", (e) => {
-        if (deleteElement) {
-          trigger[0].style.display = "none";
-        }
-
         windows.forEach((el) => {
           el.classList.remove("popup_opened");
         });
 
         popup.classList.remove("popup_opened");
         document.body.classList.remove("modal-open");
+        document.body.style.marginRight = `0px`;
+        handleGiftMargin(false);
       });
     });
   }
@@ -83,11 +106,30 @@ const modals = () => {
       });
       if (!display) {
         document.body.classList.add("modal-open");
+        let scroll = calcScroll();
+        let fixedGift = document.querySelector(".fixed-gift");
+        fixedGift.style.right = `calc(2rem + ${scroll}px)`;
+        document.body.style.marginRight = `${scroll}px`;
         document
           .querySelector(`${selector}[data-modal]`)
           .classList.add("popup_opened");
       }
     }, time);
+  }
+
+  function calcScroll() {
+    let div = document.createElement("div");
+
+    div.style.width = "50px";
+    div.style.height = "50px";
+    div.style.overflowY = "scroll";
+    div.style.visibility = "hidden";
+
+    document.body.appendChild(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+
+    return scrollWidth;
   }
 
   showModalByTime(".popup-consultation", 6000);

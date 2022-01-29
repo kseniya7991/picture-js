@@ -96,12 +96,15 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modals.js */ "./src/js/modules/modals.js");
+/* harmony import */ var _modules_scrollPage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/scrollPage.js */ "./src/js/modules/scrollPage.js");
+
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   Object(_modules_modals_js__WEBPACK_IMPORTED_MODULE_0__["default"])();
-  console.log('hello');
+  Object(_modules_scrollPage_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  console.log("hello");
 });
 
 /***/ }),
@@ -122,8 +125,25 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector),
           popup = document.querySelector(popupSelector),
           close = document.querySelectorAll(closeSelector),
-          windows = document.querySelectorAll("[data-]");
-    console.log(trigger);
+          windows = document.querySelectorAll("[data-]"),
+          fixedGift = document.querySelector(".fixed-gift"),
+          scroll = calcScroll();
+    console.log(fixedGift);
+
+    function handleGiftMargin(opened) {
+      if (opened) {
+        fixedGift.style.right = `calc(2rem + ${scroll}px)`;
+      } else {
+        fixedGift.style.right = `2rem`;
+      }
+    }
+
+    function deleteElementByClickPopup() {
+      if (deleteElement) {
+        trigger[0].style.display = "none";
+        console.log(deleteElement);
+      }
+    }
 
     if (trigger.length > 1) {
       trigger.forEach(item => {
@@ -135,8 +155,11 @@ const modals = () => {
           windows.forEach(el => {
             el.classList.remove("popup_opened");
           });
+          deleteElementByClickPopup();
           popup.classList.add("popup_opened");
           document.body.classList.add("modal_open");
+          document.body.style.marginRight = `${scroll}px`;
+          handleGiftMargin(true);
         });
       });
     } else {
@@ -148,8 +171,11 @@ const modals = () => {
         windows.forEach(el => {
           el.classList.remove("popup_opened");
         });
+        deleteElementByClickPopup();
         popup.classList.add("popup_opened");
         document.body.classList.add("modal_open");
+        document.body.style.marginRight = `${scroll}px`;
+        handleGiftMargin(true);
       });
     }
 
@@ -160,19 +186,19 @@ const modals = () => {
         });
         popup.classList.remove("popup_opened");
         document.body.classList.remove("modal_open");
+        document.body.style.marginRight = `0px`;
+        handleGiftMargin(false);
       }
     });
     close.forEach(el => {
       el.addEventListener("click", e => {
-        if (deleteElement) {
-          trigger[0].style.display = "none";
-        }
-
         windows.forEach(el => {
           el.classList.remove("popup_opened");
         });
         popup.classList.remove("popup_opened");
         document.body.classList.remove("modal-open");
+        document.body.style.marginRight = `0px`;
+        handleGiftMargin(false);
       });
     });
   }
@@ -190,9 +216,25 @@ const modals = () => {
 
       if (!display) {
         document.body.classList.add("modal-open");
+        let scroll = calcScroll();
+        let fixedGift = document.querySelector(".fixed-gift");
+        fixedGift.style.right = `calc(2rem + ${scroll}px)`;
+        document.body.style.marginRight = `${scroll}px`;
         document.querySelector(`${selector}[data-modal]`).classList.add("popup_opened");
       }
     }, time);
+  }
+
+  function calcScroll() {
+    let div = document.createElement("div");
+    div.style.width = "50px";
+    div.style.height = "50px";
+    div.style.overflowY = "scroll";
+    div.style.visibility = "hidden";
+    document.body.appendChild(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
   }
 
   showModalByTime(".popup-consultation", 6000);
@@ -202,6 +244,35 @@ const modals = () => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
+
+/***/ }),
+
+/***/ "./src/js/modules/scrollPage.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/scrollPage.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const scrollPage = () => {
+  const scrollHeight = document.documentElement.scrollHeight,
+        clientHeight = document.documentElement.clientHeight,
+        height = scrollHeight + clientHeight,
+        page = document.documentElement;
+
+  function consoleData() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    console.log(scrollHeight, clientHeight, scrollTop);
+  }
+
+  document.addEventListener("scroll", () => {
+    consoleData();
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (scrollPage);
 
 /***/ })
 

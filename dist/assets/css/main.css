@@ -1011,6 +1011,13 @@ h4 {
 .footer .modernwebdev {
   margin-top: 1rem;
 }
+.modal_open {
+  overflow: hidden;
+}
+.modal_open::-webkit-scrollbar {
+  background-color: transparent;
+}
+
 .popup-consultation {
   z-index: 20;
   position: fixed;
@@ -1143,7 +1150,6 @@ h4 {
   height: 100%;
   background-color: rgba(178, 80, 188, 0.8);
   /* Making it beautiful */
-  transition: 0.3s;
   opacity: 0;
 }
 
