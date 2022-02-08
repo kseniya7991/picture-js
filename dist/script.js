@@ -96,14 +96,11 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modals.js */ "./src/js/modules/modals.js");
-/* harmony import */ var _modules_scrollPage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/scrollPage.js */ "./src/js/modules/scrollPage.js");
-
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   Object(_modules_modals_js__WEBPACK_IMPORTED_MODULE_0__["default"])();
-  Object(_modules_scrollPage_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
   console.log("hello");
 });
 
@@ -119,7 +116,9 @@ window.addEventListener("DOMContentLoaded", () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 const modals = () => {
-  let timeOut;
+  let timeOut; // Нажата ли хоть одна кнопка на сайте
+
+  let btnPressed = false;
 
   function bindModal(triggerSelector, popupSelector, closeSelector, closeClickOverlay = true, deleteElement = false) {
     const trigger = document.querySelectorAll(triggerSelector),
@@ -128,20 +127,12 @@ const modals = () => {
           windows = document.querySelectorAll("[data-]"),
           fixedGift = document.querySelector(".fixed-gift"),
           scroll = calcScroll();
-    console.log(fixedGift);
 
     function handleGiftMargin(opened) {
       if (opened) {
         fixedGift.style.right = `calc(2rem + ${scroll}px)`;
       } else {
         fixedGift.style.right = `2rem`;
-      }
-    }
-
-    function deleteElementByClickPopup() {
-      if (deleteElement) {
-        fixedGift.classList.add("fixed-gift_hidden");
-        console.log(trigger[0]);
       }
     }
 
@@ -152,10 +143,15 @@ const modals = () => {
             e.preventDefault();
           }
 
+          btnPressed = true;
           windows.forEach(el => {
             el.classList.remove("popup_opened");
           });
-          deleteElementByClickPopup();
+
+          if (deleteElement) {
+            fixedGift.remove();
+          }
+
           popup.classList.add("popup_opened");
           document.body.classList.add("modal_open");
           document.body.style.marginRight = `${scroll}px`;
@@ -168,10 +164,15 @@ const modals = () => {
           e.preventDefault();
         }
 
+        btnPressed = true;
         windows.forEach(el => {
           el.classList.remove("popup_opened");
         });
-        deleteElementByClickPopup();
+
+        if (deleteElement) {
+          fixedGift.remove();
+        }
+
         popup.classList.add("popup_opened");
         document.body.classList.add("modal_open");
         document.body.style.marginRight = `${scroll}px`;
@@ -196,7 +197,7 @@ const modals = () => {
           el.classList.remove("popup_opened");
         });
         popup.classList.remove("popup_opened");
-        document.body.classList.remove("modal-open");
+        document.body.classList.remove("modal_open");
         document.body.style.marginRight = `0px`;
         handleGiftMargin(false);
       });
@@ -215,7 +216,7 @@ const modals = () => {
       });
 
       if (!display) {
-        document.body.classList.add("modal-open");
+        document.body.classList.add("modal_open");
         let scroll = calcScroll();
         let fixedGift = document.querySelector(".fixed-gift");
         fixedGift.style.right = `calc(2rem + ${scroll}px)`;
@@ -237,42 +238,24 @@ const modals = () => {
     return scrollWidth;
   }
 
-  showModalByTime(".popup-consultation", 6000);
+  showModalByTime(".popup-consultation", 60000);
+
+  function showByScroll(selector) {
+    window.addEventListener('scroll', () => {
+      if (!btnPressed && window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+        // Исккуственно вызываем клик
+        document.querySelector(selector).click();
+      }
+    });
+  }
+
   bindModal(".button-design", ".popup-design", ".popup-design", ".popup-close");
   bindModal(".button-consultation", ".popup-consultation", ".popup-consultation", ".popup-close");
   bindModal(".fixed-gift", ".popup-gift", ".popup-gift", ".popup-close", true);
+  showByScroll('.fixed-gift');
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
-
-/***/ }),
-
-/***/ "./src/js/modules/scrollPage.js":
-/*!**************************************!*\
-  !*** ./src/js/modules/scrollPage.js ***!
-  \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-const scrollPage = () => {
-  const scrollHeight = document.documentElement.scrollHeight,
-        clientHeight = document.documentElement.clientHeight,
-        height = scrollHeight + clientHeight,
-        page = document.documentElement;
-
-  function consoleData() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    console.log(scrollHeight, clientHeight, scrollTop);
-  }
-
-  document.addEventListener("scroll", () => {
-    consoleData();
-  });
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (scrollPage);
 
 /***/ })
 

@@ -1,5 +1,8 @@
 const modals = () => {
   let timeOut;
+  
+  // Нажата ли хоть одна кнопка на сайте
+    let btnPressed = false;
 
   function bindModal(
     triggerSelector,
@@ -15,8 +18,6 @@ const modals = () => {
       fixedGift = document.querySelector(".fixed-gift"),
       scroll = calcScroll();
 
-    console.log(fixedGift);
-
     function handleGiftMargin(opened) {
       if (opened) {
         fixedGift.style.right = `calc(2rem + ${scroll}px)`;
@@ -25,12 +26,6 @@ const modals = () => {
       }
     }
 
-    function deleteElementByClickPopup() {
-      if (deleteElement) {
-        fixedGift.classList.add("fixed-gift_hidden");
-        console.log(trigger[0]);
-      }
-    }
 
     if (trigger.length > 1) {
       trigger.forEach((item) => {
@@ -39,11 +34,16 @@ const modals = () => {
             e.preventDefault();
           }
 
+          btnPressed = true;
+
           windows.forEach((el) => {
             el.classList.remove("popup_opened");
           });
 
-          deleteElementByClickPopup();
+          if (deleteElement) {
+            fixedGift.remove()
+          }
+          
           popup.classList.add("popup_opened");
           document.body.classList.add("modal_open");
           document.body.style.marginRight = `${scroll}px`;
@@ -55,11 +55,17 @@ const modals = () => {
         if (e.target) {
           e.preventDefault();
         }
+
+        btnPressed = true;
+
         windows.forEach((el) => {
           el.classList.remove("popup_opened");
         });
 
-        deleteElementByClickPopup();
+        if (deleteElement) {
+          fixedGift.remove()
+        }
+
         popup.classList.add("popup_opened");
         document.body.classList.add("modal_open");
         document.body.style.marginRight = `${scroll}px`;
@@ -86,7 +92,7 @@ const modals = () => {
         });
 
         popup.classList.remove("popup_opened");
-        document.body.classList.remove("modal-open");
+        document.body.classList.remove("modal_open");
         document.body.style.marginRight = `0px`;
         handleGiftMargin(false);
       });
@@ -105,7 +111,7 @@ const modals = () => {
         }
       });
       if (!display) {
-        document.body.classList.add("modal-open");
+        document.body.classList.add("modal_open");
         let scroll = calcScroll();
         let fixedGift = document.querySelector(".fixed-gift");
         fixedGift.style.right = `calc(2rem + ${scroll}px)`;
@@ -132,7 +138,16 @@ const modals = () => {
     return scrollWidth;
   }
 
-  showModalByTime(".popup-consultation", 6000);
+  showModalByTime(".popup-consultation", 60000);
+
+  function showByScroll(selector) {
+    window.addEventListener('scroll', () => {
+      if(!btnPressed && (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight)) {
+        // Исккуственно вызываем клик
+        document.querySelector(selector).click();
+      }
+    })
+  }
 
   bindModal(".button-design", ".popup-design", ".popup-design", ".popup-close");
   bindModal(
@@ -142,6 +157,7 @@ const modals = () => {
     ".popup-close"
   );
   bindModal(".fixed-gift", ".popup-gift", ".popup-gift", ".popup-close", true);
+  showByScroll('.fixed-gift');
 };
 
 export default modals;
