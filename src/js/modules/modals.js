@@ -26,9 +26,6 @@ const modals = () => {
       }
     }
 
-    console.log(windows)
-
-
     trigger.forEach((item) => {
         item.addEventListener("click", (e) => {
           if (e.target) {
@@ -77,8 +74,6 @@ const modals = () => {
       });
     });
   }
-
-  console.log(!document.body.classList.contains("modal-open"));
 
   function showModalByTime(selector, time) {
     timeOut = setTimeout(() => {
