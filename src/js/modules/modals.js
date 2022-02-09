@@ -14,7 +14,7 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector),
       popup = document.querySelector(popupSelector),
       close = document.querySelectorAll(closeSelector),
-      windows = document.querySelectorAll("[data-]"),
+      windows = document.querySelectorAll("[data-modal]"),
       fixedGift = document.querySelector(".fixed-gift"),
       scroll = calcScroll();
 
@@ -26,9 +26,10 @@ const modals = () => {
       }
     }
 
+    console.log(windows)
 
-    if (trigger.length > 1) {
-      trigger.forEach((item) => {
+
+    trigger.forEach((item) => {
         item.addEventListener("click", (e) => {
           if (e.target) {
             e.preventDefault();
@@ -38,6 +39,7 @@ const modals = () => {
 
           windows.forEach((el) => {
             el.classList.remove("popup_opened");
+            el.classList.add('animated', 'fadeIn')
           });
 
           if (deleteElement) {
@@ -50,35 +52,12 @@ const modals = () => {
           handleGiftMargin(true);
         });
       });
-    } else {
-      trigger[0].addEventListener("click", (e) => {
-        if (e.target) {
-          e.preventDefault();
-        }
-
-        btnPressed = true;
-
-        windows.forEach((el) => {
-          el.classList.remove("popup_opened");
-        });
-
-        if (deleteElement) {
-          fixedGift.remove()
-        }
-
-        popup.classList.add("popup_opened");
-        document.body.classList.add("modal_open");
-        document.body.style.marginRight = `${scroll}px`;
-        handleGiftMargin(true);
-      });
-    }
-
+    
     popup.addEventListener("click", (e) => {
       if (e.target == e.currentTarget && closeClickOverlay) {
         windows.forEach((el) => {
           el.classList.remove("popup_opened");
         });
-        popup.classList.remove("popup_opened");
         document.body.classList.remove("modal_open");
         document.body.style.marginRight = `0px`;
         handleGiftMargin(false);
@@ -91,7 +70,7 @@ const modals = () => {
           el.classList.remove("popup_opened");
         });
 
-        popup.classList.remove("popup_opened");
+
         document.body.classList.remove("modal_open");
         document.body.style.marginRight = `0px`;
         handleGiftMargin(false);

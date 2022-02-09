@@ -96,11 +96,14 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modals.js */ "./src/js/modules/modals.js");
+/* harmony import */ var _modules_pageEffects_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/pageEffects.js */ "./src/js/modules/pageEffects.js");
+
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   Object(_modules_modals_js__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  Object(_modules_pageEffects_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
   console.log("hello");
 });
 
@@ -124,7 +127,7 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector),
           popup = document.querySelector(popupSelector),
           close = document.querySelectorAll(closeSelector),
-          windows = document.querySelectorAll("[data-]"),
+          windows = document.querySelectorAll("[data-modal]"),
           fixedGift = document.querySelector(".fixed-gift"),
           scroll = calcScroll();
 
@@ -136,30 +139,9 @@ const modals = () => {
       }
     }
 
-    if (trigger.length > 1) {
-      trigger.forEach(item => {
-        item.addEventListener("click", e => {
-          if (e.target) {
-            e.preventDefault();
-          }
-
-          btnPressed = true;
-          windows.forEach(el => {
-            el.classList.remove("popup_opened");
-          });
-
-          if (deleteElement) {
-            fixedGift.remove();
-          }
-
-          popup.classList.add("popup_opened");
-          document.body.classList.add("modal_open");
-          document.body.style.marginRight = `${scroll}px`;
-          handleGiftMargin(true);
-        });
-      });
-    } else {
-      trigger[0].addEventListener("click", e => {
+    console.log(windows);
+    trigger.forEach(item => {
+      item.addEventListener("click", e => {
         if (e.target) {
           e.preventDefault();
         }
@@ -167,6 +149,7 @@ const modals = () => {
         btnPressed = true;
         windows.forEach(el => {
           el.classList.remove("popup_opened");
+          el.classList.add('animated', 'fadeIn');
         });
 
         if (deleteElement) {
@@ -178,14 +161,12 @@ const modals = () => {
         document.body.style.marginRight = `${scroll}px`;
         handleGiftMargin(true);
       });
-    }
-
+    });
     popup.addEventListener("click", e => {
       if (e.target == e.currentTarget && closeClickOverlay) {
         windows.forEach(el => {
           el.classList.remove("popup_opened");
         });
-        popup.classList.remove("popup_opened");
         document.body.classList.remove("modal_open");
         document.body.style.marginRight = `0px`;
         handleGiftMargin(false);
@@ -196,7 +177,6 @@ const modals = () => {
         windows.forEach(el => {
           el.classList.remove("popup_opened");
         });
-        popup.classList.remove("popup_opened");
         document.body.classList.remove("modal_open");
         document.body.style.marginRight = `0px`;
         handleGiftMargin(false);
@@ -256,6 +236,38 @@ const modals = () => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
+
+/***/ }),
+
+/***/ "./src/js/modules/pageEffects.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/pageEffects.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const pageEffects = () => {
+  const giftBtn = document.querySelector('.fixed-gift'); // Подергивание подарка при наведении
+
+  function handleHoverGift(isHover) {
+    if (isHover) {
+      giftBtn.classList.add('animated', "swing");
+    } else {
+      giftBtn.classList.remove('animated', "swing");
+    }
+  }
+
+  giftBtn.addEventListener('mouseover', () => {
+    handleHoverGift(true);
+  });
+  giftBtn.addEventListener('mouseout', () => {
+    handleHoverGift(false);
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (pageEffects);
 
 /***/ })
 

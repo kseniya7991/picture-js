@@ -1146,8 +1146,7 @@ h4 {
 .popup-design {
   z-index: 20;
   position: fixed;
-  display: block;
-  visibility: hidden;
+  display: none;
   top: 0;
   bottom: 0;
   left: 0;
@@ -1156,13 +1155,9 @@ h4 {
   height: 100%;
   background-color: rgba(178, 80, 188, 0.8);
   /* Making it beautiful */
-  opacity: 0;
 }
 
 .popup_opened {
-  visibility: visible;
-  transition: 0.5s;
-  opacity: 1;
   display: block;
 }
 
