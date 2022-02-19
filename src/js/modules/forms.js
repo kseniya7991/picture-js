@@ -3,14 +3,16 @@
 // import clearCalcForm from "./clearCalcForm";
 
 const forms = (state) => {
-  const form = document.querySelectorAll(".form"),
+  const form = document.querySelectorAll("form"),
     inputs = document.querySelectorAll('.form > input'),
     submitBtn = document.querySelectorAll('.button-order');
 
   const message = {
     success: "Спасибо! Скоро с Вами свяжемся.",
     failure: "Что-то пошло не так. Повторите попытку.",
+    spinner: 'assets/img/spinner.gif',
   };
+
 
   //Отправление запроса на сервер
   const postData = async (url, data) => {
@@ -35,7 +37,6 @@ const forms = (state) => {
 /*   submitBtn.forEach((el) => {
       el.addEventListener("click", (e) => {
           e.preventDefault();
-          console.log("кнопку клинкули")
       })
   }) */
 
@@ -44,8 +45,21 @@ const forms = (state) => {
       e.preventDefault();
 
       const statusMessage = document.createElement("div");
-      statusMessage.classList.add("status");
-      el.appendChild(statusMessage);
+
+      statusMessage.classList.add("status", "animated", "fadeInUp");
+      el.parentNode.appendChild(statusMessage);
+
+      el.classList.add("animated", "fadeOutUp")
+      setTimeout(() => {
+        el.style.display = "none";
+      },400)
+
+      let statusImg = document.createElement('img')
+      statusImg.setAttribute('src', message.spinner);
+      statusImg.classList.add("status__img");
+      el.parentNode.appendChild(statusImg);
+
+
 
       const formData = new FormData(el);
 
@@ -64,6 +78,7 @@ const forms = (state) => {
       postData("assets/server.php", formData)
         .then((res) => {
           statusMessage.textContent = message.success;
+
         })
         .catch(() => {
           statusMessage.textContent = message.failure;

@@ -10,5 +10,4 @@ window.addEventListener("DOMContentLoaded", () => {
   forms();
   sliders('.main-slider-item', "vertical")
   sliders('.feedback-slider-item', "horizontal", ".main-prev-btn",".main-next-btn");
-  console.log("hello");
 });

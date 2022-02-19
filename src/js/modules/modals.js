@@ -62,6 +62,7 @@ const modals = () => {
     });
 
     close.forEach((el) => {
+      
       el.addEventListener("click", (e) => {
         windows.forEach((el) => {
           el.classList.remove("popup_opened");
