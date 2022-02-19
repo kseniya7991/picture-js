@@ -1026,9 +1026,7 @@ h4 {
 .popup-consultation {
   z-index: 20;
   position: fixed;
-  display: block;
-  opacity: 0;
-  visibility: hidden;
+  display: none;
   top: 0;
   bottom: 0;
   left: 0;

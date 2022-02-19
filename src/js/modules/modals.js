@@ -8,8 +8,8 @@ const modals = () => {
     triggerSelector,
     popupSelector,
     closeSelector,
-    closeClickOverlay = true,
-    deleteElement = false
+    deleteElement = false,
+    closeClickOverlay = true
   ) {
     const trigger = document.querySelectorAll(triggerSelector),
       popup = document.querySelector(popupSelector),
@@ -51,7 +51,7 @@ const modals = () => {
       });
     
     popup.addEventListener("click", (e) => {
-      if (e.target == e.currentTarget && closeClickOverlay) {
+      if ((e.target == e.currentTarget) && closeClickOverlay) {
         windows.forEach((el) => {
           el.classList.remove("popup_opened");
         });
@@ -123,14 +123,13 @@ const modals = () => {
     })
   }
 
-  bindModal(".button-design", ".popup-design", ".popup-design", ".popup-close");
+  bindModal(".button-design", ".popup-design", ".popup-close");
   bindModal(
     ".button-consultation",
     ".popup-consultation",
-    ".popup-consultation",
     ".popup-close"
   );
-  bindModal(".fixed-gift", ".popup-gift", ".popup-gift", ".popup-close", true);
+  bindModal(".fixed-gift", ".popup-gift", ".popup-close", true);
   showByScroll('.fixed-gift');
 };
 
