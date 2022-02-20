@@ -4,19 +4,29 @@
 
 const forms = (state) => {
   const form = document.querySelectorAll("form"),
-    inputs = document.querySelectorAll('.form > input'),
-    submitBtn = document.querySelectorAll('.button-order');
+    inputs = document.querySelectorAll('.form > input');
 
   const message = {
+    loading: 'Загружаем данные...',
     success: "Спасибо! Скоро с Вами свяжемся.",
-    failure: "Что-то пошло не так. Повторите попытку.",
-    spinner: 'assets/img/spinner.gif',
+    fail: "Что-то пошло не так. Повторите попытку.",
+    spinner: 'assets/img/loading.gif',
+    successImg: 'assets/img/success.png',
+    failImg: 'assets/img/fail.png',
   };
+
+  const server = {
+    design: 'assets/design.php',
+    question: 'assets/question.php',
+  };
+
+
+  
 
 
   //Отправление запроса на сервер
   const postData = async (url, data) => {
-    document.querySelector(".status").textContent = message.loading;
+    statusText.textContent = message.loading;
     let res = await fetch(url, {
       method: "POST",
       body: data,
@@ -33,32 +43,36 @@ const forms = (state) => {
     });
   };
 
-  //Обработка формы
-/*   submitBtn.forEach((el) => {
-      el.addEventListener("click", (e) => {
-          e.preventDefault();
-      })
-  }) */
 
+  // Обработка формы
    form.forEach((el) => {
     el.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const statusMessage = document.createElement("div");
+      // Динамический путь сервера
+      let pathApi;
+      el.closest('.popup-design') ? pathApi = server.design : pathApi = server.question;
 
-      statusMessage.classList.add("status", "animated", "fadeInUp");
-      el.parentNode.appendChild(statusMessage);
 
+      // Исчезание формы после нажатии кнопки submit
       el.classList.add("animated", "fadeOutUp")
       setTimeout(() => {
         el.style.display = "none";
       },400)
 
+      // Блок со статусом отправки формы (вместо самой формы)
+      let statusMessage = document.createElement("div");
+      let statusText = document.createElement("p");
+      statusMessage.classList.add("status", "animated", "fadeInUp");
+      statusText.textContent = message.loading;
+      el.parentNode.appendChild(statusMessage);
+      statusMessage.appendChild(statusText);
+
+      // Изображение статуса отправки формы
       let statusImg = document.createElement('img')
       statusImg.setAttribute('src', message.spinner);
       statusImg.classList.add("status__img");
-      el.parentNode.appendChild(statusImg);
-
+      statusMessage.appendChild(statusImg);
 
 
       const formData = new FormData(el);
@@ -75,19 +89,25 @@ const forms = (state) => {
         }
       }
 
-      postData("assets/server.php", formData)
+      postData(pathApi, formData)
         .then((res) => {
-          statusMessage.textContent = message.success;
-
+          console.log(res);
+          statusText.textContent = message.success;
+          statusImg.setAttribute('src', message.successImg);
         })
         .catch(() => {
-          statusMessage.textContent = message.failure;
+          statusText.textContent = message.fail;
+          statusImg.setAttribute('src', message.failImg);
         })
         .finally(() => {
-          clearInputs();
+          //clearInputs();
           setTimeout(() => {
             statusMessage.remove();
-          }, 3000);
+            statusImg.remove();
+            el.classList.remove("fadeOutUp")
+            el.classList.add("fadeInUp")
+            el.style.display = "block";
+          }, 5000);
         });
     });
   });
