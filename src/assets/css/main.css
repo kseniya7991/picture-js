@@ -223,6 +223,14 @@ h4 {
   padding-top: 3rem;
   /* Making it beautiful */
 }
+
+.file_upload {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .main .file_upload {
   position: relative;
   overflow: hidden;
@@ -1745,7 +1753,12 @@ h4 {
 }
 
 .status {
-  display: block;
+  margin: 0 auto;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   max-width: 50vw;
   max-height: 50vh;
   font-size: 18px;

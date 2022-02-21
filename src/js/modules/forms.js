@@ -4,7 +4,9 @@
 
 const forms = (state) => {
   const form = document.querySelectorAll("form"),
-    inputs = document.querySelectorAll('.form > input');
+    inputs = document.querySelectorAll('input'),
+    upload = document.querySelectorAll('[name="upload"]');
+    
 
   const message = {
     loading: 'Загружаем данные...',
@@ -26,7 +28,6 @@ const forms = (state) => {
 
   //Отправление запроса на сервер
   const postData = async (url, data) => {
-    statusText.textContent = message.loading;
     let res = await fetch(url, {
       method: "POST",
       body: data,
@@ -36,12 +37,25 @@ const forms = (state) => {
 
   //Очистка инпутов
   const clearInputs = () => {
-    let newState = { form: 0, width: "", height: "", type: "tree" };
-    changeModalState(newState);
     inputs.forEach((el) => {
+      console.log(el)
       el.value = "";
     });
+    upload.forEach((el) => {
+      el.previousElementSibling.textContent = "Файл не выбран";
+    })
   };
+
+  //Обработка инпута загрузки фото
+  upload.forEach((input) => {
+    input.addEventListener('input', () => {
+      let dots;
+      const nameFile = input.files[0].name.split('.');
+      nameFile[0].length > 7 ? dots = '...' : dots = '.';
+      const name = nameFile[0].substr(0,7) + dots + nameFile[1];
+      input.previousElementSibling.textContent = name;
+    })
+  })
 
 
   // Обработка формы
@@ -51,7 +65,7 @@ const forms = (state) => {
 
       // Динамический путь сервера
       let pathApi;
-      el.closest('.popup-design') ? pathApi = server.design : pathApi = server.question;
+      el.closest('.popup-design') || el.classList.contains('form_designer') ? pathApi = server.design : pathApi = server.question;
 
 
       // Исчезание формы после нажатии кнопки submit
@@ -72,7 +86,7 @@ const forms = (state) => {
       let statusImg = document.createElement('img')
       statusImg.setAttribute('src', message.spinner);
       statusImg.classList.add("status__img");
-      statusMessage.appendChild(statusImg);
+      statusMessage.prepend(statusImg);
 
 
       const formData = new FormData(el);
@@ -95,12 +109,13 @@ const forms = (state) => {
           statusText.textContent = message.success;
           statusImg.setAttribute('src', message.successImg);
         })
-        .catch(() => {
+        .catch((res) => {
+          console.log(res)
           statusText.textContent = message.fail;
           statusImg.setAttribute('src', message.failImg);
         })
         .finally(() => {
-          //clearInputs();
+          clearInputs();
           setTimeout(() => {
             statusMessage.remove();
             statusImg.remove();
