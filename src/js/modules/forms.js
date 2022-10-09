@@ -6,6 +6,8 @@ import { postData } from "../services/requests";
 const forms = (state) => {
     const form = document.querySelectorAll("form"),
         inputs = document.querySelectorAll("input"),
+        selects = document.querySelectorAll("select"),
+        resultBlock = document.querySelector(".calc-price"),
         upload = document.querySelectorAll('[name="upload"]');
 
     const message = {
@@ -22,17 +24,19 @@ const forms = (state) => {
         question: "assets/question.php",
     };
 
- 
-
     //Очистка инпутов
     const clearInputs = () => {
         inputs.forEach((el) => {
-            console.log(el);
             el.value = "";
+        });
+        selects.forEach((el) => {
+            el.selectedIndex = null;
         });
         upload.forEach((el) => {
             el.previousElementSibling.textContent = "Файл не выбран";
         });
+        resultBlock.textContent =
+            "Для расчета нужно выбрать размер картины и материал картины";
     };
 
     //Обработка инпута загрузки фото
@@ -93,14 +97,18 @@ const forms = (state) => {
                 }
             }
 
+            let calcResult = el.querySelector(".calc-price");
+            if (calcResult) {
+                formData.append("calcResult", calcResult.textContent);
+            }
+
             postData(pathApi, formData)
                 .then((res) => {
-                    console.log(res);
+                    console.log(el);
                     statusText.textContent = message.success;
                     statusImg.setAttribute("src", message.successImg);
                 })
                 .catch((res) => {
-                    console.log(res);
                     statusText.textContent = message.fail;
                     statusImg.setAttribute("src", message.failImg);
                 })

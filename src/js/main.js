@@ -5,6 +5,7 @@ import sliders from "./modules/sliders";
 import mask from "./modules/mask";
 import checkInputs from "./modules/checkInputs";
 import showMoreStyles from "./modules/showMoreStyles";
+import calc from "./modules/calc";
 
 window.addEventListener("DOMContentLoaded", () => {
     "use strict";
@@ -22,4 +23,5 @@ window.addEventListener("DOMContentLoaded", () => {
     checkInputs('[name="name"]');
     checkInputs('[name="message"]');
     showMoreStyles(".button-styles", "#styles .row");
+    calc("#size", "#material", "#options", ".promocode", ".calc-price");
 });
