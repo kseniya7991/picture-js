@@ -6,6 +6,8 @@ import mask from "./modules/mask";
 import checkInputs from "./modules/checkInputs";
 import showMoreStyles from "./modules/showMoreStyles";
 import calc from "./modules/calc";
+import filter from "./modules/filter.js";
+import pictureSize from "./modules/pictureSize";
 
 window.addEventListener("DOMContentLoaded", () => {
     "use strict";
@@ -24,4 +26,6 @@ window.addEventListener("DOMContentLoaded", () => {
     checkInputs('[name="message"]');
     showMoreStyles(".button-styles", "#styles .row");
     calc("#size", "#material", "#options", ".promocode", ".calc-price");
+    filter();
+    pictureSize();
 });
